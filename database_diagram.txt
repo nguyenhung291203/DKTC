@@ -1,0 +1,87 @@
+Table users {
+  id bigint [primary key]
+ email varchar(255)
+ name varchar(255)
+ password varchar(255)
+ username varchar(255)
+}
+
+Table roles{
+  id bigint [primary key]
+  name varchar(255)
+}
+
+Table users_roles{
+  user_id bigint
+  role_id bigint
+}
+
+ref: users.id< users_roles.user_id
+ref: roles.id< users_roles.user_id
+
+Table students {
+  id bigint [primary key]
+  name varchar(255)
+  phone varchar(20)
+  address varchar(255)
+      date_of_birth DATE
+
+}
+
+Table teachers {
+  id bigint [primary key]
+  name varchar(255)
+  phone varchar(20)
+  address varchar(255)
+      date_of_birth DATE
+    expertise VARCHAR(255)
+
+}
+
+TABLE courses {
+    id bigint [primary key]
+    title VARCHAR(255)
+    description TEXT
+    level VARCHAR(50)
+    duration int
+    quantity int
+    teacher_id bigint
+}
+
+ref: teachers.id < courses.teacher_id
+
+Table registrations_course{
+  id bigint [primary key]
+  id_student bigint
+  id_courses bigint
+  registration_date date
+}
+
+ref:students.id< registrations_course.id_student
+ref:courses.id< registrations_course.id_student
+
+
+Table class_schedule{
+  id bigint
+  id_course bigint
+  id_teacher bigint
+  start_time datetime
+  end_time datetime
+  day_of_week varchar(10)
+}
+
+ref: courses.id < class_schedule.id_course
+ref: teachers.id < class_schedule.id_teacher
+
+
+Table payments{
+  id bigint
+  id_student bigint
+  payment_date date
+  amount DECIMAL(10,2)
+  payment_method VARCHAR(50)
+}
+
+ref: students.id< payments.id_student
+
+
