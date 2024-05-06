@@ -19,15 +19,28 @@ Table users_roles{
 ref: users.id< users_roles.user_id
 ref: roles.id< users_roles.user_id
 
+Table departments{
+  id bigint [primary key]
+  name nvarchar(255)
+}
+
+Table generations{
+  id bigint [primary key]
+  name nvarchar(255)
+}
+
 Table students {
   id bigint [primary key]
   name varchar(255)
   phone varchar(20)
   address varchar(255)
       date_of_birth DATE
-
+      id_user bigint
+id_department bigint
+id_generation bigint
 }
-
+ref: students.id_department > departments.id
+ref: students.id_generation > generations.id
 Table teachers {
   id bigint [primary key]
   name varchar(255)
@@ -35,53 +48,151 @@ Table teachers {
   address varchar(255)
       date_of_birth DATE
     expertise VARCHAR(255)
-
+id_user bigint
+id_department bigint
 }
 
-TABLE courses {
-    id bigint [primary key]
-    title VARCHAR(255)
-    description TEXT
-    level VARCHAR(50)
-    duration int
-    quantity int
-    teacher_id bigint
-}
+ref: teachers.id_department > departments.id
 
-ref: teachers.id < courses.teacher_id
+ref: users.id< students.id_user
+ref: users.id< teachers.id_user
 
-Table registrations_course{
+
+Table courses{
   id bigint [primary key]
-  id_student bigint
-  id_courses bigint
-  registration_date date
-}
-
-ref:students.id< registrations_course.id_student
-ref:courses.id< registrations_course.id_student
-
-
-Table class_schedule{
-  id bigint
-  id_course bigint
+  name nvarchar(255)
   id_teacher bigint
-  start_time datetime
-  end_time datetime
-  day_of_week varchar(10)
+  address nvarchar(255)
+  date_of_week nvarchar(255)
+course_size int 
+coures_registered int 
+start_date datetime
+credit int
 }
 
-ref: courses.id < class_schedule.id_course
-ref: teachers.id < class_schedule.id_teacher
+ref : courses.id_teacher > teachers.id
 
-
-Table payments{
-  id bigint
-  id_student bigint
-  payment_date date
-  amount DECIMAL(10,2)
-  payment_method VARCHAR(50)
+Table coure_register{
+id bigint [primary key]
+id_student bigint
+score_number_one int
+score_number_two int
+score_test int
+score_letter varchar(2)
+created_date datetime
 }
 
-ref: students.id< payments.id_student
+ref: coure_register.id_student> students.id
 
+Table "users" {
+  "id" bigint [pk, increment]
+  "email" varchar(255)
+  "password" varchar(255)
+  "username" varchar(255)
+}
 
+Table "roles" {
+  "id" bigint [pk]
+  "name" varchar(255)
+}
+
+Table "users_roles" {
+  "user_id" bigint
+  "role_id" bigint
+
+  Indexes {
+    (user_id, role_id) [pk, name: "pk_users_roles"]
+  }
+}
+
+Table "times" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+}
+
+Table "students" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+  "address" VARCHAR(100)
+  "date_of_birth" DATE
+  "user_id" bigint
+}
+
+Table "courses" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+  "credit" INT
+  "code_course" VARCHAR(20)
+}
+
+Table "majors" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+}
+
+Table "teachers" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+  "major_id" INT
+  "user_id" bigint
+}
+
+Table "classes" {
+  "id" INT [pk]
+  "name" VARCHAR(50)
+  "address" VARCHAR(100)
+  "teacher_id" INT
+  "time_id" INT
+  "course_id" INT
+  "start_date" DATE
+  "end_date" DATE
+  "size" INT
+  "student_registered" INT
+}
+
+Table "results" {
+  "student_id" INT
+  "course_id" INT
+  "score_number_one" FLOAT
+  "score_number_two" FLOAT
+  "score_number_three" FLOAT
+  "score_total" float
+  "score_letter" VARCHAR(2)
+
+  Indexes {
+    (student_id, course_id) [pk]
+  }
+}
+
+Table "students_classes" {
+  "student_id" INT
+  "class_id" INT
+
+  Indexes {
+    (student_id, class_id) [pk]
+  }
+}
+
+Ref "fk_users_roles_user_id":"users"."id" < "users_roles"."user_id" [delete: cascade]
+
+Ref "fk_users_roles_role_id":"roles"."id" < "users_roles"."role_id" [delete: cascade]
+
+Ref:"users"."id" < "students"."user_id"
+
+Ref:"majors"."id" < "teachers"."major_id"
+
+Ref:"users"."id" < "teachers"."user_id"
+
+Ref:"teachers"."id" < "classes"."teacher_id"
+
+Ref:"times"."id" < "classes"."time_id"
+
+Ref:"courses"."id" < "classes"."course_id"
+
+Ref:"students"."id" < "results"."student_id"
+
+Ref:"courses"."id" < "results"."course_id"
+
+Ref:"students"."id" < "students_classes"."student_id"
+
+Ref:"classes"."id" < "students_classes"."class_id"

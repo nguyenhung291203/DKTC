@@ -34,10 +34,8 @@ public class AuthController {
 
             JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
             jwtAuthResponse.setAccessToken(token);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + token);
-            System.out.println(headers.get("Authorization"));
-            return ResponseEntity.ok().headers(headers).body(jwtAuthResponse);
+
+            return ResponseEntity.ok().body(jwtAuthResponse);
 
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
