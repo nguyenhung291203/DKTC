@@ -7,15 +7,18 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@Entity
-@Table(name = "majors")
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name="times")
 @Data
-public class Major {
+public class Time {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    @OneToMany(mappedBy = "time")
+    private Set<Class> classes;
 
 }

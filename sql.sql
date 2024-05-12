@@ -119,7 +119,9 @@ VALUES
     (2, 'Công nghệ thông tin'),
     (3, 'Điện tử viễn thông');
     
-
+INSERT INTO majors (id, name)
+VALUES
+    (4, 'Đào tạo');
 
 UPDATE students
 SET major_id = 1

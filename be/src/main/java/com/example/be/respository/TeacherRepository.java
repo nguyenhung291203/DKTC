@@ -1,18 +1,14 @@
 package com.example.be.respository;
 
-import com.example.be.models.entity.Role;
 import com.example.be.models.entity.Student;
-import com.example.be.models.entity.User;
+import com.example.be.models.entity.Teacher;
 import jakarta.websocket.server.PathParam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findByUsername(String username);
-
+public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
+    @Query("select t from Teacher t where t.user.username = :username")
+    Teacher findTeacherByUserName(@PathParam("username") String username);
 }

@@ -1,10 +1,12 @@
 package com.example.be.controller;
 
 import com.example.be.jwt.JwtTokenProvider;
+import com.example.be.models.entity.Role;
 import com.example.be.models.entity.User;
 import com.example.be.models.request.LoginRequest;
 import com.example.be.models.response.JwtAuthResponse;
 import com.example.be.service.AuthService;
+import com.example.be.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -26,15 +29,18 @@ import java.util.Optional;
 public class AuthController {
     @Autowired
     private AuthService authService;
+    @Autowired
+    private UserService userService;
     private JwtTokenProvider jwtTokenProvider;
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try{
             String token = authService.login(loginRequest);
-
+            String username = jwtTokenProvider.getUsername(token);
+            List<Role> roles = userService.getListRole(username);
             JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
             jwtAuthResponse.setAccessToken(token);
-
+            jwtAuthResponse.setRole(roles.get(0).getName());    
             return ResponseEntity.ok().body(jwtAuthResponse);
 
         }catch (Exception e){
