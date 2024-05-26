@@ -1,40 +1,52 @@
 package com.example.be.controller;
 
-import com.example.be.models.builder.StudentBuilder;
-import com.example.be.models.builder.StudentInfo;
-import com.example.be.models.builder.StudentResultBuilder;
 import com.example.be.models.entity.Student;
+import com.example.be.respository.PointRepository;
 import com.example.be.service.StudentService;
-import org.apache.catalina.security.SecurityUtil;
+
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+
 
 @RestController
 @RequestMapping("/api/student")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
+@Validated
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    @GetMapping()
-    public ResponseEntity<?> getListStudent(){
-        return ResponseEntity.ok(studentService.getListStudent());
-    }
+    @Autowired
+    PointRepository pointRepository;
     @GetMapping("/{id}")
-    public ResponseEntity<?> getStudentById(@PathVariable int id){
+    public ResponseEntity<?> getStudentById(@PathVariable(value = "id") String id){
+        Optional<Student> student = studentService.findStudentById(id);
+        System.out.println(pointRepository.getGpaByStudentId(id));
+        return student.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
 
-        return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<?> getInfoStudent(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        StudentInfo student = studentService.getStudentInfo(username);
-        return ResponseEntity.ok(student);
+    @GetMapping("/getAllStudents")
+    public ResponseEntity<?> getAllStudents(){
+        List<Student> res = studentService.getAllStudents();
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("searchListStudentByUniversityId")
+    public ResponseEntity<?> searchListStudentByUniversityId(@RequestParam("university_id") String universityId){
+        return ResponseEntity.ok(studentService.getListStudentsByUniversityId(universityId));
+    }
+
+    @GetMapping("listStudentByClassSubjectId/{id}")
+    public ResponseEntity<?> getListStudentsByClassSubjectId(@PathVariable String id){
+        return ResponseEntity.ok(studentService.getListStudentsByClassSubjectId(id));
     }
 }

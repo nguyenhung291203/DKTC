@@ -5,6 +5,7 @@ import com.example.be.jwt.JwtTokenProvider;
 import com.example.be.models.entity.User;
 import com.example.be.models.request.LoginRequest;
 import com.example.be.respository.UserRepository;
+import org.springframework.beans.MethodInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,22 +29,27 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public String login(LoginRequest loginRequest) throws Exception{
+        try{
+            Optional<User> userOptional  = userRepository.findByUsername(loginRequest.getUsername());
+            if (userOptional .isEmpty())
+                throw new DataNotFoundException("Tài khoản mật khẩu không chính xác");
+            User user = userOptional.get();
+            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                throw new DataNotFoundException("Tài khoản mật khẩu không chính xác");
+            }
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+            ));
 
-        Optional<User> userOptional  = userRepository.findByUsername(loginRequest.getUsername());
-        if (userOptional .isEmpty())
-            throw new DataNotFoundException("Tài khoản mật khẩu không chính xác");
-        User user = userOptional.get();
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new DataNotFoundException("Tài khoản mật khẩu không chính xác");
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtTokenProvider.generateToken(authentication);
+            return token;
         }
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
-        ));
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken(authentication);
-        return token;
     }
 }
 

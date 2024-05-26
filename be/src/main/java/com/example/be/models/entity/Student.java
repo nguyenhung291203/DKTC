@@ -1,9 +1,11 @@
 package com.example.be.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
@@ -12,27 +14,23 @@ import java.util.Set;
 @Table(name = "students")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(length = 8)
+    private String id;
     private String name;
-    private String address;
-    @Column(name = "date_of_birth")
+    @Column(name="date_of_birth")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
-
+    @ManyToOne
+    @JoinColumn(name="class_student_id",nullable = false)
+    private ClassStudent classStudent;
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "major_id", referencedColumnName = "id")
-    private Major major;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<Result> results;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<StudentClass> studentClasses;
 }

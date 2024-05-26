@@ -1,26 +1,20 @@
 package com.example.be.models.mapper;
 
-import com.example.be.models.builder.TeacherBuilder;
-import com.example.be.models.builder.TeacherInfo;
 import com.example.be.models.entity.Teacher;
-
-import java.util.stream.Collectors;
+import com.example.be.models.entity.User;
+import com.example.be.models.response.JwtAuthResponse;
+import com.example.be.models.response.UserTeacherResponse;
 
 public class TeacherMapper {
-    public static TeacherBuilder mapTeacherToTeacherBuilder(Teacher teacher) {
-        return TeacherBuilder.builder()
+    public static UserTeacherResponse mapUserToUserTeacher(Teacher teacher, JwtAuthResponse jwtAuthResponse){
+        return UserTeacherResponse
+                .builder()
                 .id(teacher.getId())
+                .position(teacher.getPosition())
+                .unit(teacher.getUnit())
                 .name(teacher.getName())
-                .majorName(teacher.getMajor().getName())
-                .build();
-    }
-
-    public static TeacherInfo mapTeacherToTeacherInfo(Teacher teacher){
-        return TeacherInfo.builder()
-                .id(teacher.getId())
-                .name(teacher.getName())
-                .majorName(teacher.getMajor().getName())
-                .classes(teacher.getClasses().stream().map(aClass -> ClassMapper.mapClassToClassBuilder(aClass)).collect(Collectors.toList()))
+                .jwtAuthResponse(jwtAuthResponse)
+                .user(teacher.getUser())
                 .build();
     }
 }

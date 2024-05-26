@@ -1,6 +1,5 @@
 package com.example.be.models.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,22 +10,22 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Table(name="teachers")
+@Table(name="subjects")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Teacher {
+public class Subject {
     @Id
-    @Column(length = 8)
+    @Column(length = 10)
     private String id;
     @NotNull
     private String name;
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name="unit_id",nullable = false)
-    private Unit unit;
-    private String position;
-    @OneToOne()
-    @JoinColumn(name="user_id",referencedColumnName = "id")
-    private User user;
+    @NotNull
+    private int credit;
+    private int theory;
+    private int practice;
+    private boolean required = false;
+//    @OneToMany(mappedBy = "subject")
+//    private Set<ClassSubject> classSubjects;
 }
