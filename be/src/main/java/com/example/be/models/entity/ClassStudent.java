@@ -22,6 +22,5 @@ public class ClassStudent {
     @ManyToOne
     @JoinColumn(name = "marjor_id",nullable = false)
     private Marjor marjor;
-//    @OneToMany(mappedBy = "classStudent")
-//    private Set<Student> students;
+
 }

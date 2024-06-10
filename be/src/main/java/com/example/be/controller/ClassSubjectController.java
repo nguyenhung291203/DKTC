@@ -16,19 +16,27 @@ import org.springframework.web.bind.annotation.*;
 public class ClassSubjectController {
     @Autowired
     private ClassSubjectService classSubjectService;
-
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getClassSubjectById(@PathVariable String id){
+        return ResponseEntity.ok(classSubjectService.getClassSubjectById(id));
+    }
     @GetMapping("/getAllClassSubjects")
     public ResponseEntity<?> getAllClassSubjects(){
         return ResponseEntity.ok(classSubjectService.getAllClassSubject());
     }
 
-    @GetMapping("/searchListClassSubjectsByTeacherId")
-    public ResponseEntity<?> searchListClassSubjectsByTeacherId(@RequestParam(value = "teacher_id",defaultValue = "") String teacherId){
+    @GetMapping("/searchListClassSubjectsByTeacherId/{teacherId}")
+    public ResponseEntity<?> searchListClassSubjectsByTeacherId(@PathVariable String teacherId){
         return ResponseEntity.ok(classSubjectService.getListClassSubjectByTeacherId(teacherId));
     }
 
     @GetMapping("getListClassSubjectByStudentId/{id}")
     public ResponseEntity<?> getClassSubjectByStudentId(@PathVariable String id){
         return ResponseEntity.ok(classSubjectService.getClassSubjectByStudentId(id));
+    }
+
+    @GetMapping("/getClassSubjectBySubjectId")
+    public ResponseEntity<?> getClassSubjectBySubjectId(@RequestParam(defaultValue = "") String subjectId){
+        return ResponseEntity.ok(classSubjectService.getClassSubjectBySubjectId(subjectId));
     }
 }

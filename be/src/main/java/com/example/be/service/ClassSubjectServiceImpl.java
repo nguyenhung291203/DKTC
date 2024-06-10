@@ -25,4 +25,17 @@ public class ClassSubjectServiceImpl implements ClassSubjectService{
     public List<ClassSubject> getClassSubjectByStudentId(String studentId) {
         return classSubjectRepository.getClassSubjectByStudentId(studentId);
     }
+
+    @Override
+    public ClassSubject getClassSubjectById(String id) {
+        return classSubjectRepository.findById(id).get();
+    }
+
+    @Override
+    public List<ClassSubject> getClassSubjectBySubjectId(String subjectId) {
+        if (subjectId.isEmpty()){
+            return classSubjectRepository.findAll();
+        }
+        return classSubjectRepository.getClassSubjectBySubjectId(subjectId);
+    }
 }

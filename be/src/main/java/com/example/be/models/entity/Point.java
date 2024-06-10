@@ -2,8 +2,10 @@ package com.example.be.models.entity;
 
 import com.example.be.models.key.PointKey;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 @Entity
@@ -37,10 +39,7 @@ public class Point {
         this.scoreTotal = scoreTotal;
 
         String scoreLetter = "";
-        if (scoreTotal < 4) {
-            scoreLetter = "F";
-            this.scoreLaster = 0;
-        }
+
         if (scoreTotal <= 10) {
             scoreLetter = "A+";
             this.scoreLaster = 4;
@@ -63,6 +62,10 @@ public class Point {
             scoreLetter = "D";
             this.scoreLaster = 1.0F;
         }
+        if (scoreTotal < 4) {
+            scoreLetter = "F";
+            this.scoreLaster = 0;
+        }
         this.scoreLetter = scoreLetter;
         this.actived = true;
     }
@@ -82,9 +85,9 @@ public class Point {
     @Column(name = "score_total")
     private float scoreTotal;
     @Column(name="score_laster")
-    private float scoreLaster;
+    private float scoreLaster = 0;
     @Column(name = "score_letter", length = 2)
     private String scoreLetter;
     private boolean actived = false;
-
+    private boolean studied =false;
 }

@@ -18,6 +18,4 @@ public class Unit {
     private int id;
     @NotNull
     private String name;
-//    @OneToMany(mappedBy = "unit",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
-//    private Set<Teacher> teachers;
  }

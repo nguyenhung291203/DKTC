@@ -21,4 +21,10 @@ public interface PointRepository extends JpaRepository<Point, PointKey> {
 
     @Query("select sum(p.scoreLaster*p.classSubject.subject.credit)/sum(p.classSubject.subject.credit) from Point p where p.student.id=:studentId and p.actived= true")
     float getGpaByStudentId(@PathParam("studentId") String studentId);
+
+    @Query("select count(p) from Point p where p.student.id=:studentId and p.scoreNumberThree>=4 and p.studied=true")
+    int getCompletedByStudentId(@PathParam("studentId") String studentId);
+
+    @Query("select count(p) from Point p where (p.student.id=:studentId and p.scoreNumberThree<4 and p.studied=true)")
+    int getDebtByStudentId(@PathParam("studentId") String studentId);
 }

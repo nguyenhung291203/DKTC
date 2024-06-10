@@ -1,6 +1,7 @@
 package com.example.be.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +34,6 @@ public class ClassSubject {
     @JoinColumn(name="teacher_id",nullable = false)
     private Teacher teacher;
 
-//    @OneToMany(mappedBy = "classSubject")
-//    private Set<Point> points;
+    private int registered=0;
 
 }

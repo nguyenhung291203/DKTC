@@ -15,4 +15,7 @@ public interface ClassSubjectRepository extends JpaRepository<ClassSubject,Strin
 
     @Query("select p.classSubject from Point p where p.id.studentId=:studentId")
     List<ClassSubject> getClassSubjectByStudentId(@PathParam("studentId") String studentId);
+
+    @Query("select cs from ClassSubject cs where cs.subject.id=:subjectId")
+    List<ClassSubject> getClassSubjectBySubjectId(@PathParam("subjectId") String subjectId);
 }

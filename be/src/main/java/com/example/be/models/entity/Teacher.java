@@ -1,6 +1,7 @@
 package com.example.be.models.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,6 @@ public class Teacher {
     private String position;
     @OneToOne()
     @JoinColumn(name="user_id",referencedColumnName = "id")
+    @JsonIgnore
     private User user;
 }

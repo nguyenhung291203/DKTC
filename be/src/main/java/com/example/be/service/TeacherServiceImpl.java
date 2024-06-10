@@ -1,7 +1,7 @@
 package com.example.be.service;
 
 import com.example.be.models.entity.Teacher;
-import com.example.be.models.mapper.TeacherMapper;
+import com.example.be.models.mapper.UserMapper;
 import com.example.be.models.response.JwtAuthResponse;
 import com.example.be.models.response.UserTeacherResponse;
 import com.example.be.respository.TeacherRepository;
@@ -22,6 +22,6 @@ public class TeacherServiceImpl implements TeacherService{
     @Override
     public UserTeacherResponse getTeacherByUsername(String username, JwtAuthResponse jwtAuthResponse) {
         Teacher teacher =  teacherRepository.getTeacherByUserName(username);
-        return TeacherMapper.mapUserToUserTeacher(teacher,jwtAuthResponse);
+        return UserMapper.mapUserToUserTeacher(teacher,jwtAuthResponse);
     }
 }

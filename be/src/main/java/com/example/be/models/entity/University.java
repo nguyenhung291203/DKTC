@@ -22,7 +22,5 @@ public class University {
     @NotNull
     private String name;
     private String address;
-//    @OneToMany(mappedBy = "university")
-//    private Set<Marjor> marjors;
 
 }

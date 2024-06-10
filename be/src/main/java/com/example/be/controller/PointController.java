@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/point")
-@CrossOrigin()
+@CrossOrigin
 @Validated
 public class PointController {
     @Autowired
@@ -60,14 +60,12 @@ public class PointController {
         return new ResponseEntity<>(pointService.editPointById(studentId, classesSubjectsId, pointRequest), HttpStatus.CREATED);
     }
     @PostMapping("editListPoint")
-    public ResponseEntity<?> editListPoint(@Valid @RequestBody List<PointPayload> pointPayloads) {
+    public ResponseEntity<?> editListPoint(@RequestBody List<PointPayload> pointPayloads) {
         return new ResponseEntity<>(pointService.editListPoint(pointPayloads),HttpStatus.CREATED);
     }
 
-    @GetMapping("gpa/{studentId}")
-    public ResponseEntity<?> getGpa(@PathVariable String studentId){
-        float score = pointService.getGpa(studentId);
-        float res = (float) Math.round(score * 100) /100;
-        return ResponseEntity.ok(new GpaResponse(res));
+    @GetMapping("result/{studentId}")
+    public ResponseEntity<?> getResultByStudentId(@PathVariable String studentId){
+        return ResponseEntity.ok(pointService.getResultByStudentId(studentId));
     }
 }

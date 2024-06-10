@@ -26,6 +26,4 @@ public class Subject {
     private int theory;
     private int practice;
     private boolean required = false;
-//    @OneToMany(mappedBy = "subject")
-//    private Set<ClassSubject> classSubjects;
 }

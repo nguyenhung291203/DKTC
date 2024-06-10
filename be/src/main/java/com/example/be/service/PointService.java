@@ -4,6 +4,7 @@ import com.example.be.models.entity.Point;
 import com.example.be.models.key.PointKey;
 import com.example.be.models.request.PointPayload;
 import com.example.be.models.request.PointRequest;
+import com.example.be.models.response.ResultResponse;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface PointService {
     Point editPointById(String studentId,String classesSubjectsId,PointRequest pointRequest);
     List<Point> editListPoint(List<PointPayload> pointPayloads);
     float getGpa(String studentId);
-
+    ResultResponse getResultByStudentId(String studentId);
 }

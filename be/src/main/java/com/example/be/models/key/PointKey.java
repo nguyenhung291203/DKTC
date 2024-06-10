@@ -12,7 +12,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-@Data
 public class PointKey implements Serializable {
     @Column(name="student_id")
     @NotNull(message = "Mã sinh viên không được để trống")
